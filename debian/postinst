@@ -30,10 +30,14 @@ case "$1" in
         chmod 755 ${_pkgroot}/silhouette.py
         chmod 755 ${_pkgroot}/performer.py
         chmod 755 ${_pkgroot}/scheduler.py
-        chown ${_pkgname}:${_pkgname} /var/lib/${_pkgname}/
+        chown ${_pkgname}:${_pkgname} ${_datadir}/
+
+        # this is required, as karesansui writes directly this to database
+        chmod 775 ${_datadir}
         if [ ! -f ${_datadir}/${_pkgname}.db ]; then
             sqlite3 ${_datadir}/${_pkgname}.db < ${_sqlinit}
         fi
+        chmod 664 ${_datadir}/${_pkgname}.db
         ;;
 
     abort-upgrade|abort-remove|abort-deconfigure)
